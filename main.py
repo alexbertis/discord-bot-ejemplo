@@ -26,7 +26,31 @@ async def on_voice_state_update(member, before, after):
     if after.channel and not member.bot:
         bot_channel = client.get_channel(842892349361094717)
         if bot_channel:
-            await bot_channel.send('Oye, tú, {}, qué haces entrando en {}'.format(member.name, after.channel.name))
+            mensajito = 'Tío, qué acabas de hacer {}'.format(member.mention)
+            if before.channel == after.channel:
+                if after.self_deaf and not before.self_deaf:
+                    mensajito = 'Ya se ha cansado de nosotros don {}'.format(member.mention)
+                elif before.self_deaf and not after.self_deaf:
+                    mensajito = 'Hagamos las paces {}'.format(member.mention)
+
+                elif after.self_mute and not before.self_mute:
+                    mensajito = 'Noooo tío {} por ke te muteas'.format(member.mention)
+                elif before.self_mute and not after.self_mute:
+                    mensajito = 'Hombre, ya ha vuelto nuestro amiguito {}. ¿Qué pasa, guapetón?'\
+                        .format(member.mention)
+
+                elif after.self_stream and not before.self_stream:
+                    mensajito = 'A ver qué cosa bakana nos quieres enseñar ahora {}'.format(member.mention)
+                elif before.self_stream and not after.self_stream:
+                    mensajito = '{} se finí 😔🤟'.format(member.mention)
+
+                elif after.self_video and not before.self_video:
+                    mensajito = 'Uy qué cara más bonita bb 😍 {}'.format(member.mention)
+                elif before.self_video and not after.self_video:
+                    mensajito = '{} c fue'.format(member.mention)
+            else:
+                mensajito = 'Oye, tú, {}, qué haces entrando en {}'.format(member.mention, after.channel.name)
+            await bot_channel.send(mensajito)
         else:
             print("Oye aquí no se detecta el general...")
 
@@ -41,7 +65,7 @@ async def on_message(message):
                                    'Si dices hola digo hola, si me llamas guapo pues tu mas, luego esta don quijote... '
                                    'y si pones "yo soy muy aleatorio", demuestro que yo más')
 
-    if message.content in ['holiwis', 'hola', 'hey', 'ey', 'jelou', 'wenas', 'buenas']:
+    if message.content.lower() in ['holiwis', 'hola', 'hey', 'ey', 'jelou', 'wenas', 'buenas']:
         await message.channel.send('Jelou bro 😎')
 
     if message.content.startswith('eres') or 'guapo' in message.content:
